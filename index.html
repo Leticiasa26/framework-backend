@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang = "pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teste</title>
+
+</head>
+
+<body>
+
+    <h1> Somente para testes </h1>
+
+    <ul id = "minhalista" ></ul>
+
+    <script> 
+
+        async function buscaDados(){
+
+            const resposta = await fetch ( "http://localhost:8000/estudantes" )
+
+            console.log ( resposta );
+
+            if ( resposta.status === 200 ) {
+
+                const dados = await resposta.json ()
+
+                console.log ( dados )
+                console.log ( dados [ 0 ] .nome )
+
+                // criem li a partir do vetor dados, coloque o texto que vem do banco no li, adicione o li na ul com id "minhalista"
+
+            }else{
+
+                if ( resposta.status === 400 ) {
+
+                    const dados = await resposta.json()
+                    alert ( dados.mensagem )
+
+                }
+                else{
+
+                    alert (" erro não identificado");
+                }
+            }
+        }
+
+        buscaDados()
+        
+    </script>
+    
+</body>
+
+</html>
