@@ -4,10 +4,10 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
 
-    <title> Título Modificado</title>
+    <title> Título Modificado </title>
 
 </head>
 
@@ -19,7 +19,7 @@
 
     <script> 
 
-        async function buscaDados(){
+        async function buscaDados () {
 
             const resposta = await fetch ( "http://localhost:8000/estudantes" )
 
@@ -27,10 +27,23 @@
 
             if ( resposta.status === 200 ) {
 
-                const dados = await resposta.json ()
+                const dados = await resposta.json ();
 
-                console.log ( dados )
-                console.log ( dados [ 0 ] .nome )
+                console.log ( dados );
+                console.log ( dados [ 0 ] .nome );
+
+                const ul = document.getElementById ( "minhalista" );
+
+            for ( let i = 0; i < dados.length; i++ ) {
+
+                const element = dados [ i ];
+                const novoli = document.createElement ( "li" );
+
+                novoli.innerText = element.nome
+
+                ul.appendChild ( novoli );
+                
+            }
 
                 // criem li a partir do vetor dados, coloque o texto que vem do banco no li, adicione o li na ul com id "minhalista"
 
@@ -38,13 +51,15 @@
 
                 if ( resposta.status === 400 ) {
 
-                    const dados = await resposta.json()
-                    alert ( dados.mensagem )
+                    const dados = await resposta.json ();
+
+                    alert ( dados.mensagem );
 
                 }
+
                 else{
 
-                    alert (" erro não identificado");
+                    alert ( "erro não identificado" );
                 }
             }
         }
