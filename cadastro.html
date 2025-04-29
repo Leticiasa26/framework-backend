@@ -13,13 +13,9 @@
 
 <body>
 
-    <a href = "/cadastro.html"> Link Cadastro Estudante </a>
+    
 
-    <h1> Lista de Estudantes </h1>
-
-
-
-    <form method = "get" action = "./teste" >
+   <form onsubmit = "event.preventDefault (); Transform ()">
  
         <label for = "id" > id </label>
 
@@ -34,6 +30,63 @@
 
     <script>
 
+       async function trataform () {
+
+            const inputId = document.getElementById ( "id" )
+            const inputNome = document.getElementById ( "nome" )
+            const id = inputId.value 
+            const nome = inputNome.value
+            const objEstudante = {
+
+                id,
+
+                nome
+
+            }
+
+            try {
+
+                const resposta = await fetch ( "http://localhost:8000/estudantes", {
+
+                headers:{
+
+                'Content-Type': 'application/json'
+
+                },
+
+                method:"POST",
+
+                body: JSON.stringify(objEstudante)
+
+    })
+
+        if ( resposta.status === 200 ) {
+
+            alert ( "Estudante cadastrado com sucesso!" )
+
+        }
+
+        if ( resposta.status === 400 ) {
+
+            const dados = await resposta.json ()
+
+            alert ( `Erro do servidor : backend" \n ${dasos.mensagem}` )
+
+        }
+
+        if ( resposta.status === 404 ) {
+  
+            alert ( "Erro não indentificado" )
+
+        }
+
+        } catch ( erro ) {
+
+                alert ( "Erro: erro na requisição do FETCH\n" + "Você ligou o BACKEND com npm dev?" )
+
+            }
+
+        }
 
     </script>
 

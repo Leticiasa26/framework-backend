@@ -9,7 +9,7 @@ app.get ( '/', async ( request: FastifyRequest, reply: FastifyReply ) => {
 
   reply.send ( " Fastify Funcionando " )
 
-} ) 
+} )  
 
 app.get ( '/estudantes', async (request: FastifyRequest, reply: FastifyReply ) => {
     
@@ -32,6 +32,75 @@ app.get ( '/estudantes', async (request: FastifyRequest, reply: FastifyReply ) =
     } )
 
     const resultado = await conn.query ( " SELECT * FROM estudantes " )
+    const [ dados, camposTabela ] = resultado
+
+    reply.status ( 200 ) .send ( dados )
+
+  }
+
+  catch ( erro: any ) {
+
+    if ( erro.code === 'ECONNREFUSED' ) {
+
+      console.log ( "Erro: Ligue o Laragon => Conexão Recusada" )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Ligue o Laragon => Conexão Recusada" } )
+
+    } else if ( erro.code === 'ER_BAD_DB_ERROR' ) {
+
+      console.log ( "Erro: Crie um banco de dados com  nome definido na conexão" )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Crie um banco de dados como nome definido na conexão" } )
+
+   } else if ( erro.code === 'ER_ACCESS_DENIED_ERROR' ) {
+
+      console.log ( "Erro: Conferir o usuário e senha definidos na conexão" )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Conferir o usuário e senha definidos na conexão" } )
+
+   } else if ( erro.code === 'ER_NO_SUCH_TABLE' ) {
+
+      console.log ( "Erro: Você deve criar a tabela com o mesmo nome da sua QUERY" )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Você deve criar a tabela com o mesmo nome da sua QUERY" } )
+      
+    } else if ( erro.code === 'ER_PARSE_ERROR' ) {
+
+      console.log ( "Erro: Você tem um erro de escrita em sua QUERY confira: vírgulas, parenteses e nome de colunas" )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Você tem um erro de escrita em sua QUERY confira: vírgulas, parenteses e nome de colunas" } )
+
+    } else {
+
+      console.log ( erro )
+
+      reply.status ( 400 ) .send ( { mensagem: "Erro: Não identificado" } )
+      
+    }
+  }
+} )
+
+app.post ( '/estudantes', async (request: FastifyRequest, reply: FastifyReply ) => {
+
+  const {id,nome} = request.body as any
+    
+  try {
+
+    const conn = await mysql.createConnection ( {
+
+      host: "localhost",
+
+      user: 'root',
+
+      password: "",
+
+      database: 'banco1023a',
+
+      port: 3306
+
+    } )
+
+    const resultado = await conn.query ( " INSERT INTO estudantes (id,nome) VALUES (?,?)" , [id,nome] )
     const [ dados, camposTabela ] = resultado
 
     reply.status ( 200 ) .send ( dados )
